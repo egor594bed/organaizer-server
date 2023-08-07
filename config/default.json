@@ -1,0 +1,6 @@
+{
+  "port": 5000,
+  "jwtAccess": "organaizer43",
+  "jwtRefresh": "organaizer43",
+  "mongoUri": "mongodb+srv://admin:q3uCFyjvdG4B29Lr@organaizer.ddzhvf7.mongodb.net/Organaizer?retryWrites=true&w=majority"
+}
