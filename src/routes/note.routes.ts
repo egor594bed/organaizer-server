@@ -11,5 +11,5 @@ router.get("/getNotes", authMiddleware, async (req: Request, res: Response) =>
 );
 
 router.post("/saveNotes", authMiddleware, async (req: Request, res: Response) =>
-  userAuthService.login(req, res)
+  noteController.saveNotes(req, res)
 );

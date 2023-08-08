@@ -9,8 +9,6 @@ router.get("/getTasks", authMiddleware, async (req: Request, res: Response) =>
   tasksController.getTasks(req, res)
 );
 
-router.post(
-  "/saveTasks",
-  authMiddleware
-  //   async (req: Request, res: Response) => userAuthService.login(req, res)
+router.post("/saveTasks", authMiddleware, async (req: Request, res: Response) =>
+  tasksController.saveTasks(req, res)
 );
