@@ -6,10 +6,10 @@ const router = Router();
 
 module.exports = router;
 
-router.get("/getNotes", authMiddleware, async (req: Request, res: Response) =>
+router.get("/getData", authMiddleware, async (req: Request, res: Response) =>
   noteController.getNotes(req, res)
 );
 
-router.post("/saveNotes", authMiddleware, async (req: Request, res: Response) =>
+router.post("/saveData", authMiddleware, async (req: Request, res: Response) =>
   noteController.saveNotes(req, res)
 );

@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import Task from "../models/Task";
-import { TaskDTO } from "../dto/taskDTO";
+import { TaskDTO } from "../dto/task.dto";
 import { Document, Types } from "mongoose";
 
 class NoteService {
@@ -28,27 +28,37 @@ class NoteService {
   async saveTasks(req: Request, res: Response) {
     try {
       // Деструктуризация для исключения фронтового айдишника
-      const { tokenData, text, done, deadline, id } = req.body;
+      const { tokenData, dataArr } = req.body;
 
-      if (!Types.ObjectId.isValid(id)) {
-        Task.create({
-          text,
-          done,
-          deadline,
-          userId: tokenData.userId,
-        });
-      } else {
-        const result = await Task.updateOne(
-          { _id: new Types.ObjectId(id) },
-          { $set: { text, done, deadline } }
-        ).exec();
-        if (result.matchedCount === 0) {
+      for (let i = 0; i < dataArr.length; i++) {
+        const task = dataArr[i];
+
+        if (!Types.ObjectId.isValid(task.id)) {
           Task.create({
-            text,
-            done,
-            deadline,
+            text: task.text,
+            done: task.done,
+            deadline: task.deadline,
             userId: tokenData.userId,
           });
+        } else {
+          const result = await Task.updateOne(
+            { _id: new Types.ObjectId(task.id) },
+            {
+              $set: {
+                text: task.text,
+                done: task.done,
+                deadline: task.deadline,
+              },
+            }
+          ).exec();
+          if (result.matchedCount === 0) {
+            Task.create({
+              text: task.text,
+              done: task.done,
+              deadline: task.deadline,
+              userId: tokenData.userId,
+            });
+          }
         }
       }
 

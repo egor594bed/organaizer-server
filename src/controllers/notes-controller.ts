@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import NoteGroup from "../models/NoteGroup";
-import { NoteGroupDTO } from "../dto/noteGroupDTO";
+import { NoteGroupDTO } from "../dto/noteGroup.dto";
 import { Document, Types } from "mongoose";
 
 class NoteService {
@@ -30,10 +30,10 @@ class NoteService {
   async saveNotes(req: Request, res: Response) {
     try {
       // Деструктуризация для исключения фронтового айдишника
-      const { tokenData, noteGroupsArr } = req.body;
+      const { tokenData, dataArr } = req.body;
 
-      for (let i = 0; i < noteGroupsArr.length; i++) {
-        const noteGroup = noteGroupsArr[i];
+      for (let i = 0; i < dataArr.length; i++) {
+        const noteGroup = dataArr[i];
 
         if (!Types.ObjectId.isValid(noteGroup.id)) {
           NoteGroup.create({

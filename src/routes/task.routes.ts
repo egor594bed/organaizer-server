@@ -5,10 +5,10 @@ const router = Router();
 
 module.exports = router;
 
-router.get("/getTasks", authMiddleware, async (req: Request, res: Response) =>
+router.get("/getData", authMiddleware, async (req: Request, res: Response) =>
   tasksController.getTasks(req, res)
 );
 
-router.post("/saveTasks", authMiddleware, async (req: Request, res: Response) =>
+router.post("/saveData", authMiddleware, async (req: Request, res: Response) =>
   tasksController.saveTasks(req, res)
 );
