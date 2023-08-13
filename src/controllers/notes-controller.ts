@@ -60,7 +60,7 @@ class NoteService {
   async deleteNotes(req: Request, res: Response) {
     try {
       const notesGroupId = req.query.id;
-      console.log(notesGroupId);
+
       await NoteGroup.deleteOne({ _id: notesGroupId });
 
       return res.status(201).json("Удалено");
