@@ -1,5 +1,4 @@
 import jwt from "jsonwebtoken";
-import config from "config";
 import Token from "../models/Token";
 
 interface IPayloadGen {
@@ -15,10 +14,10 @@ type tokens = {
 
 class TokenService {
   generateTokens(payload: IPayloadGen) {
-    const accessToken = jwt.sign(payload, config.get<string>("jwtAccess"), {
+    const accessToken = jwt.sign(payload, process.env.JWT_ACCESS as string, {
       expiresIn: "1h",
     });
-    const refreshToken = jwt.sign(payload, config.get<string>("jwtRefresh"), {
+    const refreshToken = jwt.sign(payload, process.env.JWT_REFRESH as string, {
       expiresIn: "30d",
     });
 
@@ -41,7 +40,7 @@ class TokenService {
 
   async verifyAccessToken(token: token) {
     try {
-      jwt.verify(token, config.get<string>("jwtAccess"));
+      jwt.verify(token, process.env.JWT_ACCESS as string);
       return true;
     } catch (error) {
       return false;
@@ -50,7 +49,7 @@ class TokenService {
 
   async verifyRefreshToken(token: token) {
     try {
-      jwt.verify(token, config.get<string>("jwtAccess"));
+      jwt.verify(token, process.env.JWT_ACCESS as string);
       return true;
     } catch (error) {
       return false;
@@ -85,7 +84,7 @@ class TokenService {
       if (refreshTokenValid && decode) {
         const accessToken = jwt.sign(
           { userId: decode.userId, email: decode.email },
-          config.get<string>("jwtAccess"),
+          process.env.JWT_ACCESS as string,
           { expiresIn: "1h" }
         );
         return {

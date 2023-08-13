@@ -1,8 +1,8 @@
 import express from "express";
-import config from "config";
 import mongoose from "mongoose";
 import cors from "cors";
 import cookieParser from "cookie-parser";
+import "dotenv";
 
 const whitelist = [
   "http://localhost:3000",
@@ -30,8 +30,8 @@ app.use("/api/auth", require("./routes/auth.routes"));
 app.use("/api/notes", require("./routes/note.routes"));
 app.use("/api/tasks", require("./routes/task.routes"));
 
-const PORT = config.get("port") || 5000;
-const uri = config.get<string>("mongoUri");
+const PORT = process.env.PORT || 5000;
+const uri = process.env.MONGO_URI as string;
 
 async function start() {
   try {
