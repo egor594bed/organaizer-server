@@ -1,14 +1,12 @@
-import { Router, Request, Response } from "express";
+import { Router } from "express";
 import authMiddleware from "../middlewares/auth-middleware";
 import tasksController from "../controllers/tasks-controller";
 const router = Router();
 
 module.exports = router;
 
-router.get("/getData", authMiddleware, async (req: Request, res: Response) =>
-  tasksController.getTasks(req, res)
-);
+router.get("/getData", authMiddleware, tasksController.getTasks);
 
-router.post("/saveData", authMiddleware, async (req: Request, res: Response) =>
-  tasksController.saveTasks(req, res)
-);
+router.post("/saveData", authMiddleware, tasksController.saveTasks);
+
+router.delete("/deleteData", authMiddleware, tasksController.deleteTasks);

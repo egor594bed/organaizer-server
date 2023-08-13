@@ -1,4 +1,4 @@
-import { Router, Request, Response } from "express";
+import { Router } from "express";
 import { check } from "express-validator";
 import userAuthController from "../controllers/user-auth-controller";
 const router = Router();
@@ -13,8 +13,7 @@ router.post(
       min: 6,
     }),
   ],
-  async (req: Request, res: Response) =>
-    userAuthController.registration(req, res)
+  userAuthController.registration
 );
 
 router.post(
@@ -23,9 +22,7 @@ router.post(
     check("email", "Введите корректный Email").normalizeEmail().isEmail(),
     check("password", "Введите пароль").exists(),
   ],
-  async (req: Request, res: Response) => userAuthController.login(req, res)
+  userAuthController.login
 );
 
-router.get("/tokenVerification", async (req: Request, res: Response) =>
-  userAuthController.tokenVerification(req, res)
-);
+router.get("/tokenVerification", userAuthController.tokenVerification);

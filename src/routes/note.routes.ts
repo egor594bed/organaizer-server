@@ -1,15 +1,12 @@
-import { Router, Request, Response } from "express";
-import userAuthService from "../controllers/user-auth-controller";
+import { Router } from "express";
 import authMiddleware from "../middlewares/auth-middleware";
-import noteController from "../controllers/notes-controller";
+import notesController from "../controllers/notes-controller";
 const router = Router();
 
 module.exports = router;
 
-router.get("/getData", authMiddleware, async (req: Request, res: Response) =>
-  noteController.getNotes(req, res)
-);
+router.get("/getData", authMiddleware, notesController.getNotes);
 
-router.post("/saveData", authMiddleware, async (req: Request, res: Response) =>
-  noteController.saveNotes(req, res)
-);
+router.post("/saveData", authMiddleware, notesController.saveNotes);
+
+router.delete("/deleteData", authMiddleware, notesController.deleteNotes);

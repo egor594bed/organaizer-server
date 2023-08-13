@@ -1,10 +1,10 @@
 import { Request, Response } from "express";
 import Task from "../models/Task";
 import { TaskDTO } from "../dto/task.dto";
-import { Document, Types } from "mongoose";
+import { Document } from "mongoose";
 
 class NoteService {
-  //Временное решение
+  //Временное решение, вынести в сераис
 
   async getTasks(req: Request, res: Response) {
     try {
@@ -33,7 +33,7 @@ class NoteService {
       for (let i = 0; i < dataArr.length; i++) {
         const task = dataArr[i];
 
-        if (!Types.ObjectId.isValid(task.id)) {
+        if (task.id) {
           Task.create({
             text: task.text,
             done: task.done,
@@ -41,8 +41,8 @@ class NoteService {
             userId: tokenData.userId,
           });
         } else {
-          const result = await Task.updateOne(
-            { _id: new Types.ObjectId(task.id) },
+          await Task.updateOne(
+            { _id: task._id },
             {
               $set: {
                 text: task.text,
@@ -51,18 +51,24 @@ class NoteService {
               },
             }
           ).exec();
-          if (result.matchedCount === 0) {
-            Task.create({
-              text: task.text,
-              done: task.done,
-              deadline: task.deadline,
-              userId: tokenData.userId,
-            });
-          }
         }
       }
 
       return res.status(201).json("Сохранено");
+    } catch (error: any) {
+      return res
+        .status(500)
+        .json({ message: error.message || "Что-то пошло не так!" });
+    }
+  }
+
+  async deleteTasks(req: Request, res: Response) {
+    try {
+      const tasksGroupId = req.query.id;
+
+      await Task.deleteOne({ _id: tasksGroupId });
+
+      return res.status(201).json("Удалено");
     } catch (error: any) {
       return res
         .status(500)

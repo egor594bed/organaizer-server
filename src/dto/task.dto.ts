@@ -6,7 +6,7 @@ export class TaskDTO {
   userId: Types.ObjectId;
   text: string;
   done: boolean;
-  deadline: string;
+  deadline: boolean;
   actualData: boolean;
 
   constructor(task: typeof Task & Document) {

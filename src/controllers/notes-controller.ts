@@ -1,10 +1,10 @@
 import { Request, Response } from "express";
 import NoteGroup from "../models/NoteGroup";
 import { NoteGroupDTO } from "../dto/noteGroup.dto";
-import { Document, Types } from "mongoose";
+import { Document } from "mongoose";
 
 class NoteService {
-  //Временное решение
+  //Временное решение, вынести в сераис
 
   async getNotes(req: Request, res: Response) {
     try {
@@ -35,28 +35,35 @@ class NoteService {
       for (let i = 0; i < dataArr.length; i++) {
         const noteGroup = dataArr[i];
 
-        if (!Types.ObjectId.isValid(noteGroup.id)) {
+        if (noteGroup.id) {
           NoteGroup.create({
             groupName: noteGroup.groupName,
             notes: noteGroup.notes,
             userId: tokenData.userId,
           });
         } else {
-          const result = await NoteGroup.updateOne(
-            { _id: new Types.ObjectId(noteGroup.id) },
+          await NoteGroup.updateOne(
+            { _id: noteGroup._id },
             { $set: { notes: noteGroup.notes } }
           ).exec();
-          if (result.matchedCount === 0) {
-            NoteGroup.create({
-              groupName: noteGroup.groupName,
-              notes: noteGroup.notes,
-              userId: tokenData.userId,
-            });
-          }
         }
       }
 
       return res.status(201).json("Сохранено");
+    } catch (error: any) {
+      return res
+        .status(500)
+        .json({ message: error.message || "Что-то пошло не так!" });
+    }
+  }
+
+  async deleteNotes(req: Request, res: Response) {
+    try {
+      const notesGroupId = req.query.id;
+      console.log(notesGroupId);
+      await NoteGroup.deleteOne({ _id: notesGroupId });
+
+      return res.status(201).json("Удалено");
     } catch (error: any) {
       return res
         .status(500)
