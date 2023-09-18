@@ -10,6 +10,7 @@ import { User } from "src/user/user.model";
 export interface ITask {
   userId: number;
   text: string;
+  deadline?: string;
 }
 
 @Table({ tableName: "task", createdAt: false, updatedAt: false })

@@ -1,18 +1,26 @@
 import { Injectable } from "@nestjs/common";
 import { Task } from "./task.model";
+import { InjectModel } from "@nestjs/sequelize";
 
 @Injectable()
 export class TaskService {
-  updateTask(updateTaskData: { taskId: string; updateTaskData: Task }) {
-    throw new Error("Method not implemented.");
+  constructor(@InjectModel(Task) private taskRepository: typeof Task) {}
+
+  updateTask(updateTaskData: { taskId: string; updateTaskFields: Task }) {
+    return this.taskRepository.update(updateTaskData.updateTaskFields, {
+      where: { taskId: updateTaskData.taskId },
+    });
   }
+
   deleteTask(taskId: string) {
-    throw new Error("Method not implemented.");
+    return this.taskRepository.destroy({ where: { taskId } });
   }
+
   createTask(newTaskData: Task) {
-    throw new Error("Method not implemented.");
+    return this.taskRepository.create(newTaskData);
   }
+
   getTasks() {
-    throw new Error("Method not implemented.");
+    return this.taskRepository.findAll();
   }
 }

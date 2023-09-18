@@ -36,7 +36,9 @@ export class NoteController {
   }
 
   @Patch("updateNote")
-  updateNote(@Body() updateNoteData: { noteId: string; updateNoteData: Note }) {
+  updateNote(
+    @Body() updateNoteData: { noteId: string; updateNoteFields: Note },
+  ) {
     return this.noteService.updateNote(updateNoteData);
   }
 

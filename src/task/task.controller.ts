@@ -14,6 +14,7 @@ import { Task } from "./task.model";
 export class TaskController {
   constructor(private taskService: TaskService) {}
 
+  //Гвард с айдишником юзера
   @Get("getTasks")
   getTasks() {
     return this.taskService.getTasks();
@@ -25,7 +26,9 @@ export class TaskController {
   }
 
   @Patch("updateTask")
-  updateTask(@Body() updateTaskData: { taskId: string; updateTaskData: Task }) {
+  updateTask(
+    @Body() updateTaskData: { taskId: string; updateTaskFields: Task },
+  ) {
     return this.taskService.updateTask(updateTaskData);
   }
 
