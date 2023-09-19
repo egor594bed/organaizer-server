@@ -2,6 +2,7 @@ import { Injectable } from "@nestjs/common";
 import { NoteGroup } from "./note-group.model";
 import { Note } from "./note.model";
 import { InjectModel } from "@nestjs/sequelize";
+import { CreateNoteDto, CreateNoteGroupDto } from "./dto/createNotesDto";
 
 @Injectable()
 export class NoteService {
@@ -28,11 +29,11 @@ export class NoteService {
     });
   }
 
-  createNote(newNoteData: Note) {
+  createNote(newNoteData: CreateNoteDto) {
     return this.noteRepository.create(newNoteData);
   }
 
-  createNoteGroup(newNoteGroupData: NoteGroup) {
+  createNoteGroup(newNoteGroupData: CreateNoteGroupDto) {
     return this.noteGroupRepository.create(newNoteGroupData);
   }
 

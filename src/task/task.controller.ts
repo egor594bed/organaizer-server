@@ -1,3 +1,4 @@
+import { ApiOperation, ApiResponse, ApiTags } from "@nestjs/swagger";
 import {
   Body,
   Controller,
@@ -8,8 +9,10 @@ import {
   Query,
 } from "@nestjs/common";
 import { TaskService } from "./task.service";
+import { CreateTaskDto } from "./dto/createTaskDto";
 import { Task } from "./task.model";
 
+@ApiTags("Задачи")
 @Controller("tasks")
 export class TaskController {
   constructor(private taskService: TaskService) {}
@@ -20,18 +23,23 @@ export class TaskController {
     return this.taskService.getTasks();
   }
 
+  @ApiOperation({ summary: "Создание задачи" })
+  @ApiResponse({ type: Task })
   @Post("createTask")
-  createTask(@Body() newTaskData: Task) {
+  createTask(@Body() newTaskData: CreateTaskDto) {
     return this.taskService.createTask(newTaskData);
   }
 
+  @ApiOperation({ summary: "Обновление задачи" })
+  @ApiResponse({ type: Task })
   @Patch("updateTask")
   updateTask(
-    @Body() updateTaskData: { taskId: string; updateTaskFields: Task },
+    @Body() updateTaskData: { taskId: string; updateTaskFields: CreateTaskDto },
   ) {
     return this.taskService.updateTask(updateTaskData);
   }
 
+  @ApiOperation({ summary: "Удаление задачи" })
   @Delete("deleteTask")
   deleteTask(@Query("taskId") taskId: string) {
     return this.taskService.deleteTask(taskId);

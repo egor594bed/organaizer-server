@@ -1,3 +1,4 @@
+import { ApiProperty } from "@nestjs/swagger";
 import {
   Column,
   DataType,
@@ -6,14 +7,15 @@ import {
   Table,
 } from "sequelize-typescript";
 import { User } from "src/user/user.model";
-
-export interface INoteGroup {
-  userId: number;
-  noteGroupName: string;
-}
+import { CreateNoteGroupDto } from "./dto/createNotesDto";
+import { Note } from "./note.model";
 
 @Table({ tableName: "noteGroup", createdAt: false, updatedAt: false })
-export class NoteGroup extends Model<NoteGroup, INoteGroup> {
+export class NoteGroup extends Model<NoteGroup, CreateNoteGroupDto> {
+  @ApiProperty({
+    example: 1,
+    description: "Уникальный идентификатор группы заметок",
+  })
   @Column({
     type: DataType.INTEGER,
     unique: true,
@@ -22,13 +24,25 @@ export class NoteGroup extends Model<NoteGroup, INoteGroup> {
   })
   noteGroupId: number;
 
+  @ApiProperty({
+    example: "Пароли для всех банков где деньги лежат",
+    description: "Название группы заметок",
+  })
   @Column({ type: DataType.STRING })
   noteGroupName: string;
 
+  @ApiProperty({
+    example: 1,
+    description: "Уникальный идентификатор пользователя",
+  })
   @ForeignKey(() => User)
   @Column({ type: DataType.INTEGER, allowNull: false })
   userId: number;
 
-  @Column({ type: DataType.STRING })
-  notes: string;
+  @ApiProperty({
+    isArray: true,
+    type: Note,
+    description: "Массив заметок",
+  })
+  notes: Note[];
 }

@@ -3,7 +3,8 @@ import { JwtService } from "@nestjs/jwt";
 import { InjectModel } from "@nestjs/sequelize";
 import { Response } from "express";
 import * as bcrypt from "bcryptjs";
-import { IUserCreationAttributes, User } from "src/user/user.model";
+import { User } from "src/user/user.model";
+import { CreateUserDto } from "src/user/dto/createUserDto";
 
 @Injectable()
 export class AuthorizationService {
@@ -12,7 +13,7 @@ export class AuthorizationService {
     private jwtService: JwtService,
   ) {}
 
-  async login(authDto: IUserCreationAttributes, response: Response) {
+  async login(authDto: CreateUserDto, response: Response) {
     const user = await this.userRepository.findOne({
       where: { email: authDto.email },
     });
@@ -46,10 +47,7 @@ export class AuthorizationService {
     return;
   }
 
-  async registration(
-    registrationData: IUserCreationAttributes,
-    response: Response,
-  ) {
+  async registration(registrationData: CreateUserDto, response: Response) {
     const user = await this.userRepository.findOne({
       where: { email: registrationData.email },
     });
